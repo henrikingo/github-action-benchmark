@@ -114,7 +114,10 @@ function convertBenchmarkToNyrkioJson(bench: Benchmark, config: Config): [Nyrkio
 
             nyrkioResult = nyrkioJsonInit(bench.commit, d);
             testName = b.testName;
-            if (testName && testName.length > 0) {
+            if (testName && testName.length > 0 && b.commit.branch && b.commit.branch.length>0) {
+                nyrkioPath = name + '/' + b.commit.branch + '/' + testName;
+            }
+            else if (testName && testName.length > 0 ) {
                 nyrkioPath = name + '/' + testName;
             } else {
                 nyrkioPath = name;
@@ -170,7 +173,7 @@ async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Pr
     let gotChanges = false;
 
     for (const r of allTestResults) {
-        const uri = nyrkioApiRoot + 'result/' + r.path;
+        const uri = nyrkioApiRoot + 'result/' + r.path + ;
         core.debug('PUT results: ' + uri);
         try {
             // Will throw on failure
