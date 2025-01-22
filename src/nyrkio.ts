@@ -173,7 +173,7 @@ async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Pr
     let gotChanges = false;
 
     for (const r of allTestResults) {
-        const uri = nyrkioApiRoot + 'result/' + r.path + ;
+        const uri = nyrkioApiRoot + 'result/' + r.path;
         console.log('PUT results: ' + uri);
         try {
             // Will throw on failure
