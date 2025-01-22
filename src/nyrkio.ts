@@ -115,13 +115,10 @@ function convertBenchmarkToNyrkioJson(bench: Benchmark, config: Config): [Nyrkio
 
             nyrkioResult = nyrkioJsonInit(bench.commit, d);
             testName = b.testName;
-            branch = b.commit.branch;
+            branch = nyrkioResult.attributes.branch;
             core.debug(branch);
-            if (testName && testName.length > 0 && branch && branch.length>0) {
+            if (testName && testName.length > 0) {
                 nyrkioPath = name + '/' + branch + '/' + testName;
-            }
-            else if (testName && testName.length > 0 ) {
-                nyrkioPath = name + '/' + testName;
             } else {
                 nyrkioPath = name;
             }
