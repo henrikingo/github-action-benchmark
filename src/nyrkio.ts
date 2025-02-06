@@ -211,7 +211,7 @@ async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Pr
                 core.setFailed(`PUT to ${uri} failed. ${err.status} ${err.code}.`);
             } else {
                 console.error(
-                    'Note: never-fail is true. Ignoring this error and continuing. Will exit successfully to keep the builf green.',
+                    'Note: never-fail is true. Ignoring this error and continuing. Will exit successfully to keep the build green.',
                 );
             }
         }
@@ -221,7 +221,7 @@ async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Pr
 }
 
 export async function nyrkioFindChanges(b: Benchmark, config: Config) {
-    const { nyrkioEnable, failOnAlert } = config;
+    const { nyrkioEnable, failOnAlert, neverFail } = config;
     core.debug('nyrkio-enable=' + nyrkioEnable.toString());
     if (!nyrkioEnable) return;
 
@@ -231,9 +231,17 @@ export async function nyrkioFindChanges(b: Benchmark, config: Config) {
 
     const changes = await postResults(allTestResults, config);
     if (changes && failOnAlert) {
-        core.setFailed('Nyrkiö detected a change in your performance test results. Please see the log for details.');
         core.info('Nyrkiö detected a change in your performance test results. Please see the log for details.');
         core.info(JSON.stringify(changes));
+        if (!neverFail) {
+            core.setFailed(
+                'Nyrkiö detected a change in your performance test results. Please see the log for details.',
+            );
+        } else {
+            console.error(
+                'Note: never-fail is true. Ignoring this error and continuing. Will exit successfully to keep the build green.',
+            );
+        }
     } else {
         console.log(
             "Nyrkiö didn't find any changes now. But you should check again in a week or so, smaller changes are detected with a delay to avoid false positives.",
