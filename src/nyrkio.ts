@@ -168,7 +168,7 @@ async function setParameters(config: Config) {
 
 async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Promise<[NyrkioAllChanges] | boolean> {
     await setParameters(config);
-    const { nyrkioToken, nyrkioApiRoot } = config;
+    const { nyrkioToken, nyrkioApiRoot, neverFail } = config;
     core.debug(nyrkioToken ? nyrkioToken.substring(0, 5) : "WHERE's MY TOKEN???");
     const options = {
         headers: {
@@ -206,10 +206,14 @@ async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Pr
             }
         } catch (err: any) {
             console.error(`PUT to ${uri} failed. I'll keep trying with the others though.`);
-            console.error(err.status);
-            console.error(err.code);
-            // console.error(err);
-            core.setFailed(`PUT to ${uri} failed. ${err.status} ${err.code}.`);
+            console.error(err.toJSON());
+            if (!neverFail) {
+                core.setFailed(`PUT to ${uri} failed. ${err.status} ${err.code}.`);
+            } else {
+                console.error(
+                    'Note: never-fail is true. Ignoring this error and continuing. Will exit successfully to keep the builf green.',
+                );
+            }
         }
     }
     if (gotChanges) return allChanges;
