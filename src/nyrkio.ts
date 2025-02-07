@@ -200,7 +200,7 @@ async function postResults(
                 const resp = response.data;
                 const v = resp[r.path];
                 const c: [NyrkioChanges] | [] = <[NyrkioChanges] | []>v;
-                if (c.length === 0) continue;
+                if (c===undefined || c.length === 0) continue;
 
                 // Note: In extreme cases Nyrkiö might alert immediately after you committed a regression.
                 // However, in most cases you'll get a separate alert a few days later, once the statistical
