@@ -219,6 +219,7 @@ async function postResults(
     let allChanges: [NyrkioAllChanges] | boolean = false;
 
     for (const r of allTestResults) {
+        core.debug(r.path);
         let uri = `${nyrkioApiRoot}result/${r.path}`;
         if (commit.prNumber) {
             uri = `${nyrkioApiRoot}pulls/${commit.repo}/${commit.prNumber}/result/${nyrkioOrg}/${r.path}`;
