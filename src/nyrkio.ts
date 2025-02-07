@@ -124,11 +124,11 @@ class NyrkioResultSorter {
         core.debug(this.r.toString());
         let ret: [NyrkioJsonPath] | null = null;
 
-        for (const k in this.r) {
+        for (let k of this.r.keys()) {
             core.debug(k);
-            for (const g in this.r.get(k)) {
+            for (let g of this.r.get(k).keys()) {
                 core.debug(g);
-                for (const t in this.r.get(k)!.get(g)) {
+                for (let t of this.r.get(k)!.get(g).keys()) {
                     core.debug(t);
                     if (!ret) {
                         ret = [{ path: k, git_commit: g, results: [this.r.get(k)!.get(g)!.get(t)!] }];
