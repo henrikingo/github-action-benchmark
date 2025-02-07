@@ -121,7 +121,7 @@ class NyrkioResultSorter {
     }
 
     iterator(): [NyrkioJsonPath] | null {
-        core.debug(this.r.length);
+        core.debug(this.r.toString());
         let ret: [NyrkioJsonPath] | null = null;
 
         for (const k in this.r) {
