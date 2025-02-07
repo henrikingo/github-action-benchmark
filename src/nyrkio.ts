@@ -166,7 +166,11 @@ async function setParameters(config: Config) {
     core.debug(response.toString());
 }
 
-async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Promise<[NyrkioAllChanges] | boolean> {
+async function postResults(
+    allTestResults: [NyrkioJsonPath],
+    config: Config,
+    commit: Commit,
+): Promise<[NyrkioAllChanges] | boolean> {
     await setParameters(config);
     const { nyrkioToken, nyrkioApiRoot, nyrkioOrg, neverFail } = config;
     core.debug(nyrkioToken ? nyrkioToken.substring(0, 5) : "WHERE's MY TOKEN???");
@@ -178,9 +182,15 @@ async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Pr
     let allChanges: [NyrkioAllChanges] | boolean = false;
 
     for (const r of allTestResults) {
-        let uri = nyrkioApiRoot + 'result/' + r.path;
+        let uri = `${nyrkioApiRoot}result/${r.path}`;
+        if (commit.prNumber) {
+            uri = `${nyrkioApiRoot}pulls/${commit.repo}/${commit.prNumber}/result/${nyrkioOrg}/${r.path}`;
+        }
         if (nyrkioOrg !== undefined) {
-            uri = nyrkioApiRoot + 'orgs/result/' + nyrkioOrg + '/' + r.path;
+            uri = `${nyrkioApiRoot}orgs/result/${nyrkioOrg}/${r.path}`;
+            if (commit.prNumber) {
+                uri = `${nyrkioApiRoot}orgs/pulls/${commit.repo}/${commit.prNumber}/result/${nyrkioOrg}/${r.path}`;
+            }
         }
         console.log('PUT results: ' + uri);
         try {
@@ -205,7 +215,11 @@ async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Pr
             }
         } catch (err: any) {
             console.error(`PUT to ${uri} failed. I'll keep trying with the others though.`);
-            console.error(err.toJSON());
+            if (err & err.toJSON) {
+                console.error(err.toJSON());
+            } else {
+                console.error(err);
+            }
             if (!neverFail) {
                 core.setFailed(`PUT to ${uri} failed. ${err.status} ${err.code}.`);
             } else {
@@ -227,7 +241,7 @@ export async function nyrkioFindChanges(b: Benchmark, config: Config) {
     core.debug(JSON.stringify(allTestResults));
     if (allTestResults === null) return;
 
-    const changes = await postResults(allTestResults, config);
+    const changes = await postResults(allTestResults, config, b.commit);
     if (changes && failOnAlert) {
         core.info('Nyrkiö detected a change in your performance test results. Please see the log for details.');
         core.info(JSON.stringify(changes));

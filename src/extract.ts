@@ -30,8 +30,10 @@ export interface Commit {
     timestamp?: string;
     tree_id?: unknown; // Unused
     url: string;
+    repo: string;
     branch?: string;
     ref?: string;
+    prNumber?: number;
 }
 
 interface PullRequest {
@@ -255,7 +257,9 @@ function getCommitFromPullRequestPayload(pr: PullRequest): Commit {
         id,
         message: pr.title,
         timestamp: pr.head.repo.updated_at,
+        repo: pr.head.repo.repo,
         url: `${pr.html_url}/commits/${id}`,
+        prNumber: pr.number,
     };
 }
 
@@ -289,6 +293,7 @@ async function getCommitFromGitHubAPIRequest(githubToken: string, ref?: string):
         message: commit.message,
         timestamp: commit.author?.date,
         url: data.html_url,
+        repo: github.context.repo.repo,
     };
 }
 
@@ -308,6 +313,7 @@ async function getCommitFromLocalRepo(commit: any): Promise<Commit> {
         message: commit.message,
         timestamp: commit.date,
         url: 'file:///' + process.cwd(),
+        repo: 'local_checkout',
     };
 }
 
