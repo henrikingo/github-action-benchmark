@@ -115,14 +115,21 @@ class NyrkioResultSorter {
         if (this.r.get(path)!.get(git_commit)!.get(result.timestamp.toString()) === undefined)
             this.r.get(path)!.get(git_commit)!.set(result.timestamp.toString(), result);
         else this.r.get(path)!.get(git_commit)!.get(result.timestamp.toString())!.metrics.concat(result.metrics);
+        core.debug(path);
+        core.debug(git_commit);
+        core.debug(result.timestamp.toString());
     }
 
     iterator(): [NyrkioJsonPath] | null {
+        core.debug(this.r.length);
         let ret: [NyrkioJsonPath] | null = null;
 
         for (const k in this.r) {
+            core.debug(k);
             for (const g in this.r.get(k)) {
+                core.debug(g);
                 for (const t in this.r.get(k)!.get(g)) {
+                    core.debug(t);
                     if (!ret) {
                         ret = [{ path: k, git_commit: g, results: [this.r.get(k)!.get(g)!.get(t)!] }];
                     } else {
