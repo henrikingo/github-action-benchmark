@@ -195,7 +195,7 @@ async function postResults(
         console.log('PUT results: ' + uri);
         try {
             // Will throw on failure
-            const response = await axios.post(uri, r.results, options);
+            const response = await axios.put(uri, r.results, options);
             if (response.data) {
                 const resp = response.data;
                 const v = resp[r.path];
