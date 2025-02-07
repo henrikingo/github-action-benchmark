@@ -136,8 +136,6 @@ class NyrkioResultSorter {
 }
 
 function convertBenchmarkToNyrkioJson(bench: Benchmark, config: Config): [NyrkioJsonPath] | null {
-    const allTestResults: [NyrkioJsonPath] | null = null;
-
     let { name } = config;
 
     const benches = bench.benches;
@@ -173,7 +171,7 @@ function convertBenchmarkToNyrkioJson(bench: Benchmark, config: Config): [Nyrkio
     if (nyrkioResult.metrics.length > 0) {
         nsrt.add(nyrkioPath, bench.commit.id, nyrkioResult);
     }
-    return allTestResults;
+    return nsrt.iterator();
 }
 
 async function setParameters(config: Config) {
