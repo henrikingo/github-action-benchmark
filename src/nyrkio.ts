@@ -178,9 +178,9 @@ async function postResults(allTestResults: [NyrkioJsonPath], config: Config): Pr
     let allChanges: [NyrkioAllChanges] | boolean = false;
 
     for (const r of allTestResults) {
-        const uri = nyrkioApiRoot + 'result/' + r.path;
+        let uri = nyrkioApiRoot + 'result/' + r.path;
         if (nyrkioOrg !== undefined) {
-            const uri = nyrkioApiRoot + 'orgs/result/' + nyrkioOrg + '/' + r.path;
+            uri = nyrkioApiRoot + 'orgs/result/' + nyrkioOrg + '/' + r.path;
         }
         console.log('PUT results: ' + uri);
         try {
