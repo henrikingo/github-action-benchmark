@@ -135,8 +135,8 @@ class NyrkioResultSorter {
                     } else {
                         ret.push({ path: k, git_commit: g, results: [this.r.get(k)!.get(g)!.get(t)!] });
                     }
-                    console.log(this.r.get(k)!.get(g)!.get(t)!);
-                    console.log(ret);
+                    core.debug(this.r.get(k)!.get(g)!.get(t)!);
+                    core.debug(ret);
                 }
             }
         }
