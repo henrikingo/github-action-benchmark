@@ -126,9 +126,9 @@ class NyrkioResultSorter {
 
         for (let k of this.r.keys()) {
             core.debug(k);
-            for (let g of this.r.get(k).keys()) {
+            for (let g of this.r.get(k)!.keys()) {
                 core.debug(g);
-                for (let t of this.r.get(k)!.get(g).keys()) {
+                for (let t of this.r.get(k)!.get(g)!.keys()) {
                     core.debug(t);
                     if (!ret) {
                         ret = [{ path: k, git_commit: g, results: [this.r.get(k)!.get(g)!.get(t)!] }];
@@ -136,7 +136,7 @@ class NyrkioResultSorter {
                         ret.push({ path: k, git_commit: g, results: [this.r.get(k)!.get(g)!.get(t)!] });
                     }
                     core.debug(this.r.get(k)!.get(g)!.get(t)!.toString());
-                    core.debug(ret.length);
+                    core.debug(`${ret.length}`);
                 }
             }
         }
