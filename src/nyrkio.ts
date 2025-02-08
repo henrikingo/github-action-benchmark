@@ -281,8 +281,8 @@ export async function nyrkioFindChanges(b: Benchmark, config: Config) {
 
     const changes = await postResults(allTestResults, config, b.commit);
     if (changes && failOnAlert) {
-        core.info('Nyrkiö detected a change in your performance test results. Please see the log for details.');
-        core.info(JSON.stringify(changes));
+        console.error("\n\nNyrkiö detected a change in your performance test results. Please see the log for details.\n");
+        console.error(JSON.stringify(changes, space=4));
         if (!neverFail) {
             core.setFailed(
                 'Nyrkiö detected a change in your performance test results. Please see the log for details.',
