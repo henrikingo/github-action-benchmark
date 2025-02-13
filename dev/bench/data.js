@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733770405547,
+  "lastUpdate": 1739475429363,
   "entries": {
     "Rust Benchmark": [
       {
@@ -25945,6 +25945,60 @@ window.BENCHMARK_DATA = {
             "value": 4,
             "unit": "auxMetricUnits",
             "extra": "30376 times\n4 procs"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "committer": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "distinct": true,
+          "id": "2f40994f25a6fa92e2468903029407946c0467d3",
+          "message": "trigger workflows",
+          "timestamp": "2025-02-13T20:04:25+02:00",
+          "tree_id": "02f28dfaa95243bdb69937d9e871e5b3fccf5573",
+          "url": "https://github.com/henrikingo/github-action-benchmark/commit/2f40994f25a6fa92e2468903029407946c0467d3"
+        },
+        "date": 1739475426471,
+        "tool": "go",
+        "benches": [
+          {
+            "name": "BenchmarkFib10",
+            "value": 314.4,
+            "unit": "ns/op",
+            "extra": "3821844 times\n4 procs"
+          },
+          {
+            "name": "BenchmarkFib20",
+            "value": 40083,
+            "unit": "ns/op",
+            "extra": "30235 times\n4 procs"
+          },
+          {
+            "name": "BenchmarkFib20WithAuxMetric",
+            "value": 39820,
+            "unit": "ns/op\t         4.000 auxMetricUnits",
+            "extra": "30067 times\n4 procs"
+          },
+          {
+            "name": "BenchmarkFib20WithAuxMetric - ns/op",
+            "value": 39820,
+            "unit": "ns/op",
+            "extra": "30067 times\n4 procs"
+          },
+          {
+            "name": "BenchmarkFib20WithAuxMetric - auxMetricUnits",
+            "value": 4,
+            "unit": "auxMetricUnits",
+            "extra": "30067 times\n4 procs"
           }
         ]
       }
@@ -63230,5 +63284,5 @@ window.BENCHMARK_DATA = {
       }
     ]
   },
-  "repoUrl": "https://github.com/benchmark-action/github-action-benchmark"
+  "repoUrl": "https://github.com/henrikingo/github-action-benchmark"
 }
