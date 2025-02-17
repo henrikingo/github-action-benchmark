@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739478958045,
+  "lastUpdate": 1739836378720,
   "entries": {
     "Rust Benchmark": [
       {
@@ -61757,6 +61757,42 @@ window.BENCHMARK_DATA = {
             "value": 43.57238197127978,
             "unit": "ns",
             "range": "± 0.12713107636602033"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "committer": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "distinct": true,
+          "id": "ee655c09b2e43a4b4dad24a4867a029579e1862f",
+          "message": "Add support for running anything under 'time' command\n\nLimbo project runs clickbench like this. And (unfortunately) this\nis a common way to implement simple benchmarks.",
+          "timestamp": "2025-02-18T01:47:31+02:00",
+          "tree_id": "aa32f59bb8017c34ec1959aed418adce24a00ccf",
+          "url": "https://github.com/henrikingo/github-action-benchmark/commit/ee655c09b2e43a4b4dad24a4867a029579e1862f"
+        },
+        "date": 1739836375658,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Sample.Benchmarks.Fib10",
+            "value": 21.245772260427476,
+            "unit": "ns",
+            "range": "± 0.05801018937693211"
+          },
+          {
+            "name": "Sample.Benchmarks.Fib20",
+            "value": 43.39192874034246,
+            "unit": "ns",
+            "range": "± 0.15532251532293664"
           }
         ]
       }
