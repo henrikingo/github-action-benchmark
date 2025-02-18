@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1739856392844,
+  "lastUpdate": 1739856713413,
   "entries": {
     "Rust Benchmark": [
       {
@@ -62225,6 +62225,42 @@ window.BENCHMARK_DATA = {
             "value": 43.0070247789224,
             "unit": "ns",
             "range": "± 0.10391562499691717"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "committer": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "distinct": true,
+          "id": "505b095f12ba045176af691e6d87e518e854a7e7",
+          "message": "time output might use tabs not spaces",
+          "timestamp": "2025-02-18T07:28:56+02:00",
+          "tree_id": "a29ec5158b0dc4e3e987391067affb4619028a01",
+          "url": "https://github.com/henrikingo/github-action-benchmark/commit/505b095f12ba045176af691e6d87e518e854a7e7"
+        },
+        "date": 1739856710334,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Sample.Benchmarks.Fib10",
+            "value": 22.055046505161695,
+            "unit": "ns",
+            "range": "± 0.05351590184452272"
+          },
+          {
+            "name": "Sample.Benchmarks.Fib20",
+            "value": 43.05611367225647,
+            "unit": "ns",
+            "range": "± 0.12376674968490298"
           }
         ]
       }
