@@ -34,6 +34,7 @@ export interface Commit {
     branch?: string;
     ref?: string;
     prNumber?: number;
+    repoUrl: string;
 }
 
 interface PullRequest {
@@ -251,7 +252,7 @@ function getCommitFromPullRequestPayload(pr: PullRequest): Commit {
         name: username, // XXX: Fallback, not correct
         username,
     };
-
+    const commitUrl = pr.html_url ?? pr.base.repo.full_name ?? pr._links.html;
     return {
         author: user,
         committer: user,
@@ -259,9 +260,10 @@ function getCommitFromPullRequestPayload(pr: PullRequest): Commit {
         message: pr.title,
         timestamp: pr.head.repo.updated_at,
         repo: pr.base.repo.full_name,
-        url: pr.html_url ?? pr.base.repo.full_name ?? pr._links.html,
+        url: pr.head.url,
         branch: pr.base.ref_name || pr.base.ref,
         prNumber: pr.number,
+        repoUrl: commitUrl,
     };
 }
 
@@ -294,12 +296,14 @@ async function getCommitFromGitHubAPIRequest(githubToken: string, ref?: string):
         id: data.sha,
         message: commit.message,
         timestamp: commit.author?.date,
-        url: data.html_url,
+        url: commit.url,
         repo: github.context.repo.repo,
+        repoUrl: data.html_url,
     };
 }
 
-async function getCommitFromLocalRepo(commit: any): Promise<Commit> {
+// Visible for testing / mocking
+export async function getCommitFromLocalRepo(commit: any): Promise<Commit> {
     return {
         author: {
             name: commit.author?.name,
@@ -314,8 +318,9 @@ async function getCommitFromLocalRepo(commit: any): Promise<Commit> {
         id: commit.commit,
         message: commit.message,
         timestamp: commit.date,
-        url: 'file:///' + process.cwd(),
+        url: `file:///${process.cwd()}/commits/${commit.commit}`,
         repo: 'local_checkout',
+        repoUrl: 'file:///' + process.cwd(),
     };
 }
 
@@ -324,9 +329,11 @@ async function getCommit(githubToken?: string, ref?: string): Promise<Commit> {
         core.debug('Return head_commit');
         core.debug(JSON.stringify(github.context.payload, null, 4));
         const commit: Commit = github.context.payload.head_commit;
-        commit.url =
-            github.context.payload.repository?.html_url ?? github.context.payload.head_commit.split(/\/commit\//)[0];
-        commit.repo = github.context.payload.repository?.full_name ?? commit.url;
+        commit.url = commit.url ?? github.context.payload.head_commit.url;
+        commit.repo =
+            github.context.payload.repository?.full_name ??
+            commit.url.split(/\/commit\//)[0].replace('https://github.com/', '');
+        commit.repoUrl = commit.url.split(/\/commit\//)[0];
 
         return commit;
     }
@@ -338,11 +345,6 @@ async function getCommit(githubToken?: string, ref?: string): Promise<Commit> {
         return getCommitFromPullRequestPayload(pr);
     }
 
-    const localRepo = gitCommitInfo();
-    if (localRepo) {
-        return getCommitFromLocalRepo(localRepo);
-    }
-
     if (!githubToken) {
         throw new Error(
             `No commit information is found in payload: ${JSON.stringify(
@@ -351,12 +353,17 @@ async function getCommit(githubToken?: string, ref?: string): Promise<Commit> {
                 2,
             )}. Also, no 'github-token' provided, could not fallback to GitHub API Request.`,
         );
+    } else {
+        return getCommitFromGitHubAPIRequest(githubToken, ref);
     }
 
-    return getCommitFromGitHubAPIRequest(githubToken, ref);
+    const localRepo = gitCommitInfo();
+    if (localRepo) {
+        return getCommitFromLocalRepo(localRepo);
+    }
 }
 
-async function addCommitBranch(commit: Commit) {
+async function addCommitBranch(commit: Commit): Promise<undefined> {
     console.log(commit);
     if (commit.prNumber) {
         // For pull requests, we actually want the base (aka target) branch
@@ -385,6 +392,7 @@ async function addCommitBranch(commit: Commit) {
         console.log('Use the branch name of whatever is checked out in my CWD.');
         commit.branch = maybeBranch ? maybeBranch : '';
     }
+    return;
 }
 
 function extractCargoResult(output: string): BenchmarkResult[] {
@@ -807,14 +815,14 @@ function extractLuauBenchmarkResult(output: string): BenchmarkResult[] {
 
     return results;
 }
-function parseTimeOutput(line: string): number|undefined {
+function parseTimeOutput(line: string): number | undefined {
     core.debug(`parse time ${line}`);
-    const t = line.split("\t")[1];
-    if (t===undefined) return;
+    const t = line.split('\t')[1];
+    if (t === undefined) return;
     const tparts = t.split('m');
 
-    core.debug(tparts[0])
-    if (tparts[1]===undefined || !tparts[1].endsWith("s")) return;
+    core.debug(tparts[0]);
+    if (tparts[1] === undefined || !tparts[1].endsWith('s')) return;
     return parseFloat(tparts[0]) * 60.0 + parseFloat(tparts[1].substring(-1));
 }
 function extractTimeBenchmarkResult(output: string): BenchmarkResult[] {
@@ -833,7 +841,7 @@ function extractTimeBenchmarkResult(output: string): BenchmarkResult[] {
         if (line.startsWith('real')) {
             const v = parseTimeOutput(line);
             core.debug(`${v}`);
-            if(v!==undefined)
+            if (v !== undefined)
                 results.push({
                     testName: name,
                     name: 'real',
@@ -845,7 +853,7 @@ function extractTimeBenchmarkResult(output: string): BenchmarkResult[] {
             const v = parseTimeOutput(line);
 
             core.debug(`${v}`);
-            if(v!==undefined)
+            if (v !== undefined)
                 results.push({
                     testName: name,
                     name: 'user',
@@ -856,7 +864,7 @@ function extractTimeBenchmarkResult(output: string): BenchmarkResult[] {
         if (line.startsWith('sys')) {
             const v = parseTimeOutput(line);
             core.debug(`${v}`);
-            if(v!==undefined)
+            if (v !== undefined)
                 results.push({
                     testName: name,
                     name: 'sys',
@@ -865,7 +873,7 @@ function extractTimeBenchmarkResult(output: string): BenchmarkResult[] {
                 });
             firstline = true;
         }
-        core.debug("loop");
+        core.debug('loop');
     }
 
     return results;
@@ -928,7 +936,7 @@ export async function extractResult(config: Config): Promise<Benchmark> {
     if (benches.length === 0) {
         throw new Error(`No benchmark result was found in ${config.outputFilePath}. Benchmark output was '${output}'`);
     }
-    console.log("get commit");
+    console.log('get commit');
     const commit = await getCommit(githubToken, ref);
     await addCommitBranch(commit);
     return {
