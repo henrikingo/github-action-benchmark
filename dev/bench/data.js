@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741134045618,
+  "lastUpdate": 1741134633168,
   "entries": {
     "Rust Benchmark": [
       {
@@ -62729,6 +62729,42 @@ window.BENCHMARK_DATA = {
             "value": 42.99148873885473,
             "unit": "ns",
             "range": "± 0.1453746900770706"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ff95b09c991ec1518b9ae48b126a90857c459747",
+          "message": "Merge pull request #2 from henrikingo/myfork-master\n\nMyfork master",
+          "timestamp": "2025-03-05T02:29:26+02:00",
+          "tree_id": "0f543c3599823f89eca773457f910e5904c2a3d4",
+          "url": "https://github.com/henrikingo/github-action-benchmark/commit/ff95b09c991ec1518b9ae48b126a90857c459747"
+        },
+        "date": 1741134629939,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Sample.Benchmarks.Fib10",
+            "value": 21.226303881832532,
+            "unit": "ns",
+            "range": "± 0.06003233948881073"
+          },
+          {
+            "name": "Sample.Benchmarks.Fib20",
+            "value": 43.03197423219681,
+            "unit": "ns",
+            "range": "± 0.13771173204318202"
           }
         ]
       }
