@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740008350585,
+  "lastUpdate": 1741134045618,
   "entries": {
     "Rust Benchmark": [
       {
@@ -62693,6 +62693,42 @@ window.BENCHMARK_DATA = {
             "value": 43.66042745113373,
             "unit": "ns",
             "range": "± 0.26675125219022255"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "committer": {
+            "email": "henrik@nyrk.io",
+            "name": "Henrik Ingo",
+            "username": "henrikingo"
+          },
+          "distinct": true,
+          "id": "b27056144be23ea2c80fbfec7d4b301eccb47903",
+          "message": "Change nyrkio.ts so that url is commit and repoUrl... you know.",
+          "timestamp": "2025-02-20T09:21:11+02:00",
+          "tree_id": "7933d7ecbba23fd2e1385a227304f04bfe41996b",
+          "url": "https://github.com/henrikingo/github-action-benchmark/commit/b27056144be23ea2c80fbfec7d4b301eccb47903"
+        },
+        "date": 1741134041730,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Sample.Benchmarks.Fib10",
+            "value": 21.23454057253324,
+            "unit": "ns",
+            "range": "± 0.07166689699588573"
+          },
+          {
+            "name": "Sample.Benchmarks.Fib20",
+            "value": 42.99148873885473,
+            "unit": "ns",
+            "range": "± 0.1453746900770706"
           }
         ]
       }
